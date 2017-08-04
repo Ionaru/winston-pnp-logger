@@ -76,7 +76,7 @@ logger.error('Does not compute!');
 ```
 
 ### WinstonPnPLogger.warn
-Logger on the 'warning' level.
+Logger on the 'warn' level.
 
 Example usage:
 ```js
@@ -118,3 +118,12 @@ logger.winston.log('info', 'blog it');
 ```js
 logger.winston.profile('test');
 ```
+
+## Environment Variables
+This package will respond to several environment variables, these have to be set **before** instantiating WinstonPnPLogger for them to have any effect.
+
+### process.env.LEVEL
+Sets the console output level, default is `'info'`
+
+### process.env.SILENT
+Disables all logging except error logging to the console.
