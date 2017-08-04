@@ -6,12 +6,12 @@ var mkdirp = require("mkdirp");
 var path = require("path");
 var WinstonPnPLogger = (function () {
     function WinstonPnPLogger(options) {
+        var _this = this;
         if (exports.logger) {
             throw new Error('Do not create multiple WinstonPnPLogger instances, use the exposed instance through ' +
                 '`require(\'winston-pnp-logger\').logger` or configure the options instead.');
         }
         this.options = options || {};
-        var scope = this;
         // Default options set to true.
         this.jsonEnabled = this.options.enableJson !== false;
         this.showTimestamp = this.options.showTimestamp !== false;
@@ -19,22 +19,22 @@ var WinstonPnPLogger = (function () {
         var consoleLogLevel = process.env.LEVEL || 'info';
         var transports = [];
         transports.push(new winston.transports.Console({
+            colorize: true,
             level: consoleLogLevel,
             timestamp: function () {
-                return scope.getLogTimeStamp();
-            },
-            colorize: true
+                return _this.getLogTimeStamp();
+            }
         }));
         transports = this.createFileTransports(transports);
         if (process.env.SILENT === 'true') {
             // Only print errors and log nothing to file, useful in certain test cases.
             transports = [
                 new winston.transports.Console({
+                    colorize: true,
                     level: 'error',
                     timestamp: function () {
-                        return scope.getLogTimeStamp();
-                    },
-                    colorize: true
+                        return _this.getLogTimeStamp();
+                    }
                 })
             ];
         }
@@ -45,20 +45,21 @@ var WinstonPnPLogger = (function () {
         this.debug = this.winston.debug;
         this.silly = this.winston.silly;
         // Expose this WinstonPnPLogger instance as the 'logger' export.
-        exports.logger = scope;
+        exports.logger = this;
         if (this.announceSelf) {
             this.info('Winston Plug & Play Logger enabled');
         }
     }
     WinstonPnPLogger.prototype.createFileTransports = function (transports) {
+        var _this = this;
         if (!this.options.logDir) {
             return transports;
         }
         var logDirs = {
             debug: path.join(this.options.logDir, '/debug/'),
+            error: path.join(this.options.logDir, '/error/'),
             info: path.join(this.options.logDir, '/info/'),
-            warn: path.join(this.options.logDir, '/warn/'),
-            error: path.join(this.options.logDir, '/error/')
+            warn: path.join(this.options.logDir, '/warn/')
         };
         for (var dirKey in logDirs) {
             if (logDirs.hasOwnProperty(dirKey)) {
@@ -70,48 +71,48 @@ var WinstonPnPLogger = (function () {
         var warnFilePath = logDirs.warn + '_plain.log';
         var errFilePath = logDirs.error + '_plain.log';
         transports.push(new WinstonDRF({
-            name: 'file#debug',
             datePattern: 'log_yyyy-MM-dd',
-            level: 'debug',
-            prepend: true,
-            timestamp: function () {
-                return exports.logger.getLogTimeStamp();
-            },
             filename: debugFilePath,
-            json: false
-        }));
-        transports.push(new WinstonDRF({
-            name: 'file#log',
-            datePattern: 'log_yyyy-MM-dd',
-            level: 'info',
+            json: false,
+            level: 'debug',
+            name: 'file#debug',
             prepend: true,
             timestamp: function () {
-                return exports.logger.getLogTimeStamp();
-            },
+                return _this.getLogTimeStamp();
+            }
+        }));
+        transports.push(new WinstonDRF({
+            datePattern: 'log_yyyy-MM-dd',
             filename: logFilePath,
-            json: false
-        }));
-        transports.push(new WinstonDRF({
-            name: 'file#warn',
-            datePattern: 'log_yyyy-MM-dd',
-            level: 'warn',
+            json: false,
+            level: 'info',
+            name: 'file#log',
             prepend: true,
             timestamp: function () {
-                return exports.logger.getLogTimeStamp();
-            },
+                return _this.getLogTimeStamp();
+            }
+        }));
+        transports.push(new WinstonDRF({
+            datePattern: 'log_yyyy-MM-dd',
             filename: warnFilePath,
-            json: false
-        }));
-        transports.push(new WinstonDRF({
-            name: 'file#error',
-            datePattern: 'log_yyyy-MM-dd',
-            level: 'error',
+            json: false,
+            level: 'warn',
+            name: 'file#warn',
             prepend: true,
             timestamp: function () {
-                return exports.logger.getLogTimeStamp();
-            },
+                return _this.getLogTimeStamp();
+            }
+        }));
+        transports.push(new WinstonDRF({
+            datePattern: 'log_yyyy-MM-dd',
             filename: errFilePath,
-            json: false
+            json: false,
+            level: 'error',
+            name: 'file#error',
+            prepend: true,
+            timestamp: function () {
+                return _this.getLogTimeStamp();
+            }
         }));
         if (this.jsonEnabled) {
             var debugFileJSONPath = logDirs.debug + '_json.log';
@@ -119,44 +120,44 @@ var WinstonPnPLogger = (function () {
             var warnFileJSONPath = logDirs.warn + '_json.log';
             var errFileJSONPath = logDirs.error + '_json.log';
             transports.push(new WinstonDRF({
-                name: 'file#jsondebug',
                 datePattern: 'log_yyyy-MM-dd',
+                filename: debugFileJSONPath,
                 level: 'debug',
+                name: 'file#jsondebug',
                 prepend: true,
                 timestamp: function () {
-                    return exports.logger.getLogTimeStamp();
-                },
-                filename: debugFileJSONPath
+                    return _this.getLogTimeStamp();
+                }
             }));
             transports.push(new WinstonDRF({
-                name: 'file#jsonlog',
                 datePattern: 'log_yyyy-MM-dd',
+                filename: logFileJSONPath,
                 level: 'info',
+                name: 'file#jsonlog',
                 prepend: true,
                 timestamp: function () {
-                    return exports.logger.getLogTimeStamp();
-                },
-                filename: logFileJSONPath
+                    return _this.getLogTimeStamp();
+                }
             }));
             transports.push(new WinstonDRF({
-                name: 'file#jsonwarn',
                 datePattern: 'log_yyyy-MM-dd',
+                filename: warnFileJSONPath,
                 level: 'warn',
+                name: 'file#jsonwarn',
                 prepend: true,
                 timestamp: function () {
-                    return exports.logger.getLogTimeStamp();
-                },
-                filename: warnFileJSONPath
+                    return _this.getLogTimeStamp();
+                }
             }));
             transports.push(new WinstonDRF({
-                name: 'file#jsonerror',
                 datePattern: 'log_yyyy-MM-dd',
+                filename: errFileJSONPath,
                 level: 'error',
+                name: 'file#jsonerror',
                 prepend: true,
                 timestamp: function () {
-                    return exports.logger.getLogTimeStamp();
-                },
-                filename: errFileJSONPath
+                    return _this.getLogTimeStamp();
+                }
             }));
         }
         return transports;

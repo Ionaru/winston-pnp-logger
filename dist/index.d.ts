@@ -3,7 +3,7 @@ import winston = require('winston');
 import LoggerInstance = winston.LoggerInstance;
 import { LeveledLogMethod } from 'winston';
 export declare let logger: WinstonPnPLogger;
-export interface Options {
+export interface IOptions {
     logDir?: string;
     enableJson?: boolean;
     showTimestamp?: boolean;
@@ -22,7 +22,7 @@ export declare class WinstonPnPLogger {
     private showTimestamp;
     private showMilliSeconds;
     private announceSelf;
-    constructor(options?: Options);
+    constructor(options?: IOptions);
     private createFileTransports(transports);
     private getLogTimeStamp();
 }
