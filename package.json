@@ -1,0 +1,32 @@
+{
+  "name": "winston-pnp-logger",
+  "version": "1.0.0",
+  "description": "A Plug & Play solution for Winston.",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prepare": "npm run build",
+    "build": "tsc",
+    "lint": "tslint --project ./tsconfig.json --type-check -c tslint.json \"lib/**/*.ts\"",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Jeroen Akkerman",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Ionaru/winston-pnp-logger.git"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@types/mkdirp": "^0.5.0",
+    "@types/node": "^8.0.19",
+    "@types/winston": "^2.3.4",
+    "tslint": "^5.5.0",
+    "typescript": "^2.4.2"
+  },
+  "dependencies": {
+    "mkdirp": "^0.5.1",
+    "winston": "^2.3.1",
+    "winston-daily-rotate-file": "^1.4.6"
+  }
+}
