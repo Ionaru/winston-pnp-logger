@@ -1,5 +1,7 @@
 # Winston Plug & Play Logger
 
+[![npm](https://img.shields.io/npm/v/npm.svg)](https://www.npmjs.com/package/winston-pnp-logger)
+
 Mainly built for my own projects, this package provides an Plug & Play solution for the [Winston](https://www.npmjs.com/package/winston) multi-transport async logging library with multiple transports and logging to file.
 There's only a very minimal configuration required to start using the logger.
 
