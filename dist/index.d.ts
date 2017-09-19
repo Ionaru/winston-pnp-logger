@@ -1,7 +1,5 @@
 /// <reference types="winston" />
-import winston = require('winston');
-import LoggerInstance = winston.LoggerInstance;
-import { LeveledLogMethod } from 'winston';
+import { LeveledLogMethod, LoggerInstance } from 'winston';
 export declare let logger: WinstonPnPLogger;
 export interface IOptions {
     logDir?: string;
@@ -23,6 +21,6 @@ export declare class WinstonPnPLogger {
     private showMilliSeconds;
     private announceSelf;
     constructor(options?: IOptions);
-    private createFileTransports(transports);
+    private createFileTransports(transportsList);
     private getLogTimeStamp();
 }

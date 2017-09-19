@@ -4,3 +4,4 @@ lib/
 logs/
 test/
 tsconfig.json
+.editorconfig

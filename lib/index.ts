@@ -1,11 +1,7 @@
-import winston = require('winston');
-import WinstonDRF = require('winston-daily-rotate-file');
 import mkdirp = require('mkdirp');
 import path = require('path');
-
-import TransportInstance = winston.TransportInstance;
-import LoggerInstance = winston.LoggerInstance;
-import {LeveledLogMethod} from 'winston';
+import { LeveledLogMethod, Logger, LoggerInstance, TransportInstance, transports } from 'winston';
+import * as WinstonDRF from 'winston-daily-rotate-file';
 
 interface ILogDirs {
     [key: string]: string;
@@ -56,10 +52,10 @@ export class WinstonPnPLogger {
         this.announceSelf = this.options.announceSelf !== false;
 
         const consoleLogLevel = process.env.LEVEL || 'info';
-        let transports: TransportInstance[] = [];
+        let transportsList: TransportInstance[] = [];
 
-        transports.push(
-            new winston.transports.Console({
+        transportsList.push(
+            new transports.Console({
                 colorize: true,
                 level: consoleLogLevel,
                 timestamp: (): string => {
@@ -67,12 +63,12 @@ export class WinstonPnPLogger {
                 }
             }));
 
-        transports = this.createFileTransports(transports);
+        transportsList = this.createFileTransports(transportsList);
 
         if (process.env.SILENT === 'true') {
             // Only print errors and log nothing to file, useful in certain test cases.
-            transports = [
-                new winston.transports.Console({
+            transportsList = [
+                new transports.Console({
                     colorize: true,
                     level: 'error',
                     timestamp: (): string => {
@@ -82,7 +78,7 @@ export class WinstonPnPLogger {
             ];
         }
 
-        this.winston = new (winston.Logger)({transports});
+        this.winston = new (Logger)({transports: transportsList});
         this.info = this.winston.info;
         this.warn = this.winston.warn;
         this.error = this.winston.error;
@@ -97,9 +93,9 @@ export class WinstonPnPLogger {
         }
     }
 
-    private createFileTransports(transports: TransportInstance[]): TransportInstance[] {
+    private createFileTransports(transportsList: TransportInstance[]): TransportInstance[] {
         if (!this.options.logDir) {
-            return transports;
+            return transportsList;
         }
 
         const logDirs: ILogDirs = {
@@ -120,7 +116,7 @@ export class WinstonPnPLogger {
         const warnFilePath = logDirs.warn + '_plain.log';
         const errFilePath = logDirs.error + '_plain.log';
 
-        transports.push(
+        transportsList.push(
             new WinstonDRF({
                 datePattern: 'log_yyyy-MM-dd',
                 filename: debugFilePath,
@@ -133,7 +129,7 @@ export class WinstonPnPLogger {
                 }
             }));
 
-        transports.push(
+        transportsList.push(
             new WinstonDRF({
                 datePattern: 'log_yyyy-MM-dd',
                 filename: logFilePath,
@@ -146,7 +142,7 @@ export class WinstonPnPLogger {
                 }
             }));
 
-        transports.push(
+        transportsList.push(
             new WinstonDRF({
                 datePattern: 'log_yyyy-MM-dd',
                 filename: warnFilePath,
@@ -159,7 +155,7 @@ export class WinstonPnPLogger {
                 }
             }));
 
-        transports.push(
+        transportsList.push(
             new WinstonDRF({
                 datePattern: 'log_yyyy-MM-dd',
                 filename: errFilePath,
@@ -178,7 +174,7 @@ export class WinstonPnPLogger {
             const warnFileJSONPath = logDirs.warn + '_json.log';
             const errFileJSONPath = logDirs.error + '_json.log';
 
-            transports.push(
+            transportsList.push(
                 new WinstonDRF({
                     datePattern: 'log_yyyy-MM-dd',
                     filename: debugFileJSONPath,
@@ -190,7 +186,7 @@ export class WinstonPnPLogger {
                     }
                 }));
 
-            transports.push(
+            transportsList.push(
                 new WinstonDRF({
                     datePattern: 'log_yyyy-MM-dd',
                     filename: logFileJSONPath,
@@ -202,7 +198,7 @@ export class WinstonPnPLogger {
                     }
                 }));
 
-            transports.push(
+            transportsList.push(
                 new WinstonDRF({
                     datePattern: 'log_yyyy-MM-dd',
                     filename: warnFileJSONPath,
@@ -214,7 +210,7 @@ export class WinstonPnPLogger {
                     }
                 }));
 
-            transports.push(
+            transportsList.push(
                 new WinstonDRF({
                     datePattern: 'log_yyyy-MM-dd',
                     filename: errFileJSONPath,
@@ -227,7 +223,7 @@ export class WinstonPnPLogger {
                 }));
         }
 
-        return transports;
+        return transportsList;
     }
 
     private getLogTimeStamp(): string {

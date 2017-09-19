@@ -1,7 +1,7 @@
 {
   "defaultSeverity": "error",
   "extends": [
-    "tslint:recommended"
+    "tslint:latest"
   ],
   "jsRules": {},
   "rules": {
@@ -16,6 +16,5 @@
         "singleline": "never"
       }
     ]
-  },
-  "rulesDirectory": []
+  }
 }

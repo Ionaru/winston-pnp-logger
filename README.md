@@ -26,6 +26,11 @@ const logger = new WinstonPnPLogger();
 logger.info('Hello!');
 ```
 
+Also add this when you're using Typescript:
+```bash
+npm install @types/winston --save-dev
+```
+
 ## API
 
 ### WinstonPnPLogger(options)
@@ -95,6 +100,8 @@ logger.info('Information: stowaway.');
 ### WinstonPnPLogger.debug
 Logger on the 'debug' level (4).
 
+Enable by setting the environment variable LEVEL to `'debug'` or `'silly'`.
+
 Example usage:
 ```js
 logger.debug('foo bar');
@@ -102,6 +109,8 @@ logger.debug('foo bar');
 
 ### WinstonPnPLogger.silly
 Logger on the 'silly' level (5). This will not be logged to file.
+
+Enable by setting the environment variable LEVEL to `'silly'`.
 
 Example usage:
 ```js
@@ -122,8 +131,8 @@ logger.winston.profile('test');
 ## Environment Variables
 This package will respond to several environment variables, these have to be set **before** instantiating WinstonPnPLogger for them to have any effect.
 
-### process.env.LEVEL
-Sets the console output level, default is `'info'`
+### LEVEL
+Sets the console output level, default is `'info'`.
 
-### process.env.SILENT
-Disables all logging except error logging to the console.
+### SILENT
+Disables all console and file logging, but will still log errors to the console.
