@@ -2,8 +2,8 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var mkdirp = require("mkdirp");
 var path = require("path");
-var WinstonDRF = require("winston-daily-rotate-file");
 var winston_1 = require("winston");
+var WinstonDRF = require("winston-daily-rotate-file");
 var WinstonPnPLogger = /** @class */ (function () {
     function WinstonPnPLogger(options) {
         var _this = this;
