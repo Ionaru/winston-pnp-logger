@@ -51,6 +51,8 @@ export class WinstonPnPLogger {
         this.showTimestamp = this.options.showTimestamp !== false;
         this.announceSelf = this.options.announceSelf !== false;
 
+        this.showMilliSeconds = this.options.showMilliSeconds || false;
+
         const consoleLogLevel = process.env.LEVEL || 'info';
         let transportsList: TransportInstance[] = [];
 

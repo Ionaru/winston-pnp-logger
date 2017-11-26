@@ -16,6 +16,7 @@ var WinstonPnPLogger = /** @class */ (function () {
         this.jsonEnabled = this.options.enableJson !== false;
         this.showTimestamp = this.options.showTimestamp !== false;
         this.announceSelf = this.options.announceSelf !== false;
+        this.showMilliSeconds = this.options.showMilliSeconds || false;
         var consoleLogLevel = process.env.LEVEL || 'info';
         var transportsList = [];
         transportsList.push(new winston_1.transports.Console({
