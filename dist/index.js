@@ -177,7 +177,7 @@ var WinstonPnPLogger = /** @class */ (function () {
         var date = [year, month, day].join('-');
         var time = [hour, minute, second].join(':');
         if (this.showMilliSeconds) {
-            var milliseconds = ('0' + now.getMilliseconds()).slice(-3);
+            var milliseconds = ('00' + now.getMilliseconds()).slice(-3);
             time += '.' + milliseconds;
         }
         return [date, time].join(' ');

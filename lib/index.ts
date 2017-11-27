@@ -245,7 +245,7 @@ export class WinstonPnPLogger {
         let time = [hour, minute, second].join(':');
 
         if (this.showMilliSeconds) {
-            const milliseconds = ('0' + now.getMilliseconds()).slice(-3);
+            const milliseconds = ('00' + now.getMilliseconds()).slice(-3);
             time += '.' + milliseconds;
         }
 
