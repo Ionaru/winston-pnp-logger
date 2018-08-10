@@ -3,7 +3,6 @@
   "extends": [
     "tslint:latest"
   ],
-  "jsRules": {},
   "rules": {
     "quotemark": [
       true,
@@ -12,7 +11,7 @@
     "trailing-comma": [
       true,
       {
-        "multiline": "never",
+        "multiline": "always",
         "singleline": "never"
       }
     ]
