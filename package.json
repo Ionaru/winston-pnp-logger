@@ -1,6 +1,6 @@
 {
   "name": "winston-pnp-logger",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A Plug & Play solution for Winston.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
