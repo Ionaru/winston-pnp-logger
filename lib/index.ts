@@ -1,8 +1,8 @@
-import mkdirp = require('mkdirp');
-import path = require('path');
+import * as mkdirp from 'mkdirp';
+import * as path from 'path';
 import { createLogger, format, LeveledLogMethod, Logger, transports } from 'winston';
 import * as WinstonDRF from 'winston-daily-rotate-file';
-import TransportStream = require('winston-transport');
+import * as TransportStream from 'winston-transport';
 
 interface ILogDirs {
     [key: string]: string;
