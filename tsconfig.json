@@ -5,6 +5,7 @@
         "experimentalDecorators": true,
         "emitDecoratorMetadata": true,
         "strict": true,
+        "newLine": "LF",
         "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noImplicitReturns": true,
