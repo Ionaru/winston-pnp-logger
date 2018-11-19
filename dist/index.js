@@ -7,6 +7,11 @@ var WinstonDRF = require("winston-daily-rotate-file");
 var WinstonPnPLogger = /** @class */ (function () {
     function WinstonPnPLogger(options) {
         var _this = this;
+        this.pnpFormatter = winston_1.format(function (info) {
+            var timestamp = _this.getLogTimeStamp();
+            info.level = timestamp + " - " + info.level;
+            return info;
+        });
         if (exports.logger) {
             throw new Error('Do not create multiple WinstonPnPLogger instances, use the exposed instance through ' +
                 '`require(\'winston-pnp-logger\').logger` or configure the options instead.');
@@ -20,26 +25,20 @@ var WinstonPnPLogger = /** @class */ (function () {
         var consoleLogLevel = process.env.LEVEL || 'info';
         var transportsList = [];
         transportsList.push(new winston_1.transports.Console({
-            colorize: true,
+            format: winston_1.format.combine(winston_1.format.colorize(), this.pnpFormatter(), winston_1.format.simple()),
             level: consoleLogLevel,
-            timestamp: function () {
-                return _this.getLogTimeStamp();
-            }
         }));
         transportsList = this.createFileTransports(transportsList);
         if (process.env.SILENT === 'true') {
             // Only print errors and log nothing to file, useful in certain test cases.
             transportsList = [
                 new winston_1.transports.Console({
-                    colorize: true,
+                    format: winston_1.format.combine(winston_1.format.colorize(), this.pnpFormatter(), winston_1.format.simple()),
                     level: 'error',
-                    timestamp: function () {
-                        return _this.getLogTimeStamp();
-                    }
-                })
+                }),
             ];
         }
-        this.winston = new (winston_1.Logger)({ transports: transportsList });
+        this.winston = winston_1.createLogger({ transports: transportsList });
         this.info = this.winston.info;
         this.warn = this.winston.warn;
         this.error = this.winston.error;
@@ -52,7 +51,6 @@ var WinstonPnPLogger = /** @class */ (function () {
         }
     }
     WinstonPnPLogger.prototype.createFileTransports = function (transportsList) {
-        var _this = this;
         if (!this.options.logDir) {
             return transportsList;
         }
@@ -60,105 +58,73 @@ var WinstonPnPLogger = /** @class */ (function () {
             debug: path.join(this.options.logDir, '/debug/'),
             error: path.join(this.options.logDir, '/error/'),
             info: path.join(this.options.logDir, '/info/'),
-            warn: path.join(this.options.logDir, '/warn/')
+            warn: path.join(this.options.logDir, '/warn/'),
         };
         for (var dirKey in logDirs) {
             if (logDirs.hasOwnProperty(dirKey)) {
                 mkdirp.sync(logDirs[dirKey]);
             }
         }
-        var debugFilePath = logDirs.debug + '_plain.log';
-        var logFilePath = logDirs.info + '_plain.log';
-        var warnFilePath = logDirs.warn + '_plain.log';
-        var errFilePath = logDirs.error + '_plain.log';
+        var debugFilePath = logDirs.debug + 'log_%DATE%_plain.log';
+        var logFilePath = logDirs.info + 'log_%DATE%_plain.log';
+        var warnFilePath = logDirs.warn + 'log_%DATE%_plain.log';
+        var errFilePath = logDirs.error + 'log_%DATE%_plain.log';
         transportsList.push(new WinstonDRF({
-            datePattern: 'log_yyyy-MM-dd',
+            datePattern: 'YYYY-MM-DD',
             filename: debugFilePath,
+            format: winston_1.format.combine(this.pnpFormatter(), winston_1.format.simple()),
             json: false,
             level: 'debug',
-            name: 'file#debug',
-            prepend: true,
-            timestamp: function () {
-                return _this.getLogTimeStamp();
-            }
         }));
         transportsList.push(new WinstonDRF({
-            datePattern: 'log_yyyy-MM-dd',
+            datePattern: 'YYYY-MM-DD',
             filename: logFilePath,
+            format: winston_1.format.combine(this.pnpFormatter(), winston_1.format.simple()),
             json: false,
             level: 'info',
-            name: 'file#log',
-            prepend: true,
-            timestamp: function () {
-                return _this.getLogTimeStamp();
-            }
         }));
         transportsList.push(new WinstonDRF({
-            datePattern: 'log_yyyy-MM-dd',
+            datePattern: 'YYYY-MM-DD',
             filename: warnFilePath,
+            format: winston_1.format.combine(this.pnpFormatter(), winston_1.format.simple()),
             json: false,
             level: 'warn',
-            name: 'file#warn',
-            prepend: true,
-            timestamp: function () {
-                return _this.getLogTimeStamp();
-            }
         }));
         transportsList.push(new WinstonDRF({
-            datePattern: 'log_yyyy-MM-dd',
+            datePattern: 'YYYY-MM-DD',
             filename: errFilePath,
+            format: winston_1.format.combine(this.pnpFormatter(), winston_1.format.simple()),
             json: false,
             level: 'error',
-            name: 'file#error',
-            prepend: true,
-            timestamp: function () {
-                return _this.getLogTimeStamp();
-            }
         }));
         if (this.jsonEnabled) {
-            var debugFileJSONPath = logDirs.debug + '_json.log';
-            var logFileJSONPath = logDirs.info + '_json.log';
-            var warnFileJSONPath = logDirs.warn + '_json.log';
-            var errFileJSONPath = logDirs.error + '_json.log';
+            var debugFileJSONPath = logDirs.debug + 'log_%DATE%_json.log';
+            var logFileJSONPath = logDirs.info + 'log_%DATE%_json.log';
+            var warnFileJSONPath = logDirs.warn + 'log_%DATE%_json.log';
+            var errFileJSONPath = logDirs.error + 'log_%DATE%_json.log';
             transportsList.push(new WinstonDRF({
-                datePattern: 'log_yyyy-MM-dd',
+                datePattern: 'YYYY-MM-DD',
                 filename: debugFileJSONPath,
+                format: winston_1.format.combine(winston_1.format.timestamp(), winston_1.format.json()),
                 level: 'debug',
-                name: 'file#jsondebug',
-                prepend: true,
-                timestamp: function () {
-                    return _this.getLogTimeStamp();
-                }
             }));
             transportsList.push(new WinstonDRF({
-                datePattern: 'log_yyyy-MM-dd',
+                datePattern: 'YYYY-MM-DD',
                 filename: logFileJSONPath,
+                format: winston_1.format.combine(winston_1.format.timestamp(), winston_1.format.json()),
                 level: 'info',
-                name: 'file#jsonlog',
-                prepend: true,
-                timestamp: function () {
-                    return _this.getLogTimeStamp();
-                }
             }));
             transportsList.push(new WinstonDRF({
-                datePattern: 'log_yyyy-MM-dd',
+                datePattern: 'YYYY-MM-DD',
                 filename: warnFileJSONPath,
+                format: winston_1.format.combine(winston_1.format.timestamp(), winston_1.format.json()),
                 level: 'warn',
-                name: 'file#jsonwarn',
-                prepend: true,
-                timestamp: function () {
-                    return _this.getLogTimeStamp();
-                }
             }));
             transportsList.push(new WinstonDRF({
-                datePattern: 'log_yyyy-MM-dd',
+                datePattern: 'YYYY-MM-DD',
                 filename: errFileJSONPath,
+                format: winston_1.format.combine(winston_1.format.timestamp(), winston_1.format.json()),
                 level: 'error',
-                name: 'file#jsonerror',
-                prepend: true,
-                timestamp: function () {
-                    return _this.getLogTimeStamp();
-                }
             }));
         }
         return transportsList;
@@ -185,3 +151,4 @@ var WinstonPnPLogger = /** @class */ (function () {
     return WinstonPnPLogger;
 }());
 exports.WinstonPnPLogger = WinstonPnPLogger;
+//# sourceMappingURL=index.js.map

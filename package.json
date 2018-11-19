@@ -1,12 +1,12 @@
 {
   "name": "winston-pnp-logger",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "A Plug & Play solution for Winston.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "prepare": "npm run build",
-    "build": "tsc",
+    "build": "tsc --project tsconfig.json",
     "lint": "tslint --project ./tsconfig.json -c tslint.json \"lib/**/*.ts\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,14 +19,14 @@
   "license": "MIT",
   "devDependencies": {
     "@types/mkdirp": "0.5.2",
-    "@types/node": "10.5.7",
-    "@types/winston": "2.3.9",
+    "@types/node": "^10.12.9",
     "tslint": "5.11.0",
-    "typescript": "3.0.1"
+    "typescript": "^3.1.6"
   },
   "dependencies": {
     "mkdirp": "0.5.1",
-    "winston": "2.4.0",
-    "winston-daily-rotate-file": "1.7.2"
+    "winston": "^3.1.0",
+    "winston-daily-rotate-file": "^3.5.1",
+    "winston-transport": "^4.2.0"
   }
 }

@@ -1,4 +1,4 @@
-import { LeveledLogMethod, LoggerInstance } from 'winston';
+import { LeveledLogMethod, Logger } from 'winston';
 export declare let logger: WinstonPnPLogger;
 export interface IOptions {
     logDir?: string;
@@ -8,17 +8,18 @@ export interface IOptions {
     announceSelf?: boolean;
 }
 export declare class WinstonPnPLogger {
-    info: LeveledLogMethod;
-    warn: LeveledLogMethod;
     error: LeveledLogMethod;
+    warn: LeveledLogMethod;
+    info: LeveledLogMethod;
     debug: LeveledLogMethod;
     silly: LeveledLogMethod;
-    winston: LoggerInstance;
+    winston: Logger;
     private options;
-    private jsonEnabled;
-    private showTimestamp;
-    private showMilliSeconds;
-    private announceSelf;
+    private readonly jsonEnabled;
+    private readonly showTimestamp;
+    private readonly showMilliSeconds;
+    private readonly announceSelf;
+    private readonly pnpFormatter;
     constructor(options?: IOptions);
     private createFileTransports;
     private getLogTimeStamp;
