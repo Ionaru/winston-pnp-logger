@@ -19,14 +19,14 @@
   "license": "MIT",
   "devDependencies": {
     "@types/mkdirp": "0.5.2",
-    "@types/node": "^10.5.8",
+    "@types/node": "^10.12.9",
     "tslint": "5.11.0",
-    "typescript": "3.0.1"
+    "typescript": "^3.1.6"
   },
   "dependencies": {
     "mkdirp": "0.5.1",
-    "winston": "^3.0.0",
-    "winston-daily-rotate-file": "^3.3.0",
+    "winston": "^3.1.0",
+    "winston-daily-rotate-file": "^3.5.1",
     "winston-transport": "^4.2.0"
   }
 }
