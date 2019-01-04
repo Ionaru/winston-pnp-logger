@@ -25,7 +25,7 @@ var WinstonPnPLogger = /** @class */ (function () {
         var consoleLogLevel = process.env.LEVEL || 'info';
         var transportsList = [];
         transportsList.push(new winston_1.transports.Console({
-            format: winston_1.format.combine(winston_1.format.colorize(), this.pnpFormatter(), winston_1.format.simple()),
+            format: winston_1.format.combine(winston_1.format.colorize(), this.pnpFormatter(), winston_1.format.splat(), winston_1.format.simple()),
             level: consoleLogLevel,
         }));
         transportsList = this.createFileTransports(transportsList);
@@ -33,7 +33,7 @@ var WinstonPnPLogger = /** @class */ (function () {
             // Only print errors and log nothing to file, useful in certain test cases.
             transportsList = [
                 new winston_1.transports.Console({
-                    format: winston_1.format.combine(winston_1.format.colorize(), this.pnpFormatter(), winston_1.format.simple()),
+                    format: winston_1.format.combine(winston_1.format.colorize(), this.pnpFormatter(), winston_1.format.simple(), winston_1.format.simple()),
                     level: 'error',
                 }),
             ];

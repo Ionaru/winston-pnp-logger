@@ -69,6 +69,7 @@ export class WinstonPnPLogger {
                 format: format.combine(
                     format.colorize(),
                     this.pnpFormatter(),
+                    format.splat(),
                     format.simple(),
                 ),
                 level: consoleLogLevel,
@@ -83,6 +84,7 @@ export class WinstonPnPLogger {
                     format: format.combine(
                         format.colorize(),
                         this.pnpFormatter(),
+                        format.splat(),
                         format.simple(),
                     ),
                     level: 'error',

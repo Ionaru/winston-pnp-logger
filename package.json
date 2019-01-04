@@ -1,32 +1,33 @@
 {
-  "name": "winston-pnp-logger",
-  "version": "1.0.6",
-  "description": "A Plug & Play solution for Winston.",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "prepare": "npm run build",
-    "build": "tsc --project tsconfig.json",
-    "lint": "tslint --project ./tsconfig.json -c tslint.json \"lib/**/*.ts\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "Jeroen Akkerman",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Ionaru/winston-pnp-logger.git"
-  },
-  "license": "MIT",
-  "devDependencies": {
-    "@types/mkdirp": "0.5.2",
-    "@types/node": "^10.12.9",
-    "tslint": "5.11.0",
-    "typescript": "^3.1.6"
-  },
-  "dependencies": {
-    "mkdirp": "0.5.1",
-    "winston": "^3.1.0",
-    "winston-daily-rotate-file": "^3.5.1",
-    "winston-transport": "^4.2.0"
-  }
+    "name": "winston-pnp-logger",
+    "version": "1.0.8",
+    "description": "A Plug & Play solution for Winston.",
+    "main": "dist/index",
+    "typings": "dist/index",
+    "types": "dist/index.d.ts",
+    "scripts": {
+        "prepare": "npm run build",
+        "build": "tsc --project tsconfig.json",
+        "lint": "tslint --project ./tsconfig.json -c tslint.json \"lib/**/*.ts\"",
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "Jeroen Akkerman",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/Ionaru/winston-pnp-logger.git"
+    },
+    "license": "MIT",
+    "devDependencies": {
+        "@types/mkdirp": "0.5.2",
+        "@types/node": "*",
+        "tslint": "^5.12.0",
+        "typescript": "^3.1.6"
+    },
+    "dependencies": {
+        "mkdirp": "0.5.1",
+        "winston": "^3.1.0",
+        "winston-daily-rotate-file": "^3.5.1",
+        "winston-transport": "^4.2.0"
+    }
 }

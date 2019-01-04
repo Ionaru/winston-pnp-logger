@@ -5,3 +5,4 @@ logs/
 test/
 tsconfig.json
 .editorconfig
+package-lock.json
